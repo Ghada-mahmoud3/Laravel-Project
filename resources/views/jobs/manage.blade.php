@@ -10,7 +10,10 @@
                     <span>Posted on: {{ $job->created_at->format('M d, Y') }}</span>
                 </div>
                 <div class="d-flex gap-2">
+                    <!-- Edit Button -->
                     <a href="{{ route('jobs.edit', $job->id) }}" class="btn btn-warning btn-sm">Edit</a>
+
+                    <!-- Delete Button with Confirmation -->
                     <form action="{{ route('jobs.destroy', $job->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this job?');">
                         @csrf
                         @method('DELETE')

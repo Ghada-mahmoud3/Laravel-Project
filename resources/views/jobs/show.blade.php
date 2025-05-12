@@ -14,7 +14,6 @@
 
 <br><br><br>
 
-{{-- Check if the job's application deadline has passed --}}
 @if(\Carbon\Carbon::now()->lessThanOrEqualTo(\Carbon\Carbon::parse($job->application_deadline)))
     <!-- Application Form -->
     <form action="{{ route('applications.store') }}" method="POST" enctype="multipart/form-data" class="mb-5">
@@ -46,8 +45,34 @@
         </div>
     </form>
 @else
+    <form class="mb-5" style="opacity: 0.5; pointer-events: none;">
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label><br>
+            <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com" disabled><br><br>
+        </div>
+
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label><br>
+            <input type="text" name="phone" id="phone" class="form-control" placeholder="e.g. +201234567890" disabled><br><br>
+        </div>
+
+        <div class="mb-3">
+            <label for="resume" class="form-label">Upload Resume</label><br>
+            <input type="file" name="resume" id="resume" class="form-control" accept=".pdf,.doc,.docx" disabled><br><br>
+        </div>
+
+        <div class="mb-3">
+            <label for="message" class="form-label">Additional Message (optional)</label><br>
+            <textarea name="message" id="message" class="form-control" rows="8" disabled></textarea><br><br>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary" disabled>Apply</button>
+        </div>
+    </form>
     <p class="text-danger">The application deadline for this job has passed.</p>
 @endif
+
 
 <br>
 <a href="{{ route('jobs.search') }}" class="btn btn-secondary">Return to Search</a>

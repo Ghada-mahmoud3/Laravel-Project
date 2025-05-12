@@ -5,7 +5,7 @@
         <p>This action cannot be undone.</p>
     </div>
 
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-3">
         <form action="{{ route('jobs.destroy', $job->id) }}" method="POST">
             @csrf
             @method('DELETE')
