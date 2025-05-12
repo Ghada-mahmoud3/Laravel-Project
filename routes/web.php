@@ -1,19 +1,18 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use App\Models\User;
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
-
+   use Illuminate\Support\Facades\Route;
+   use App\Http\Controllers\Auth\RegisteredUserController;
+   use App\Models\User;
 
    Route::get('/', function () {
        return view('welcome');
    });
+
+   Route::get('/register', [RegisteredUserController::class, 'roleSelection'])->name('register');
+   Route::get('/register/employer', [RegisteredUserController::class, 'createEmployer'])->name('register.employer');
+   Route::post('/register/employer', [RegisteredUserController::class, 'storeEmployer'])->name('register.employer.store');
+   Route::get('/register/candidate', [RegisteredUserController::class, 'createCandidate'])->name('register.candidate');
+   Route::post('/register/candidate', [RegisteredUserController::class, 'storeCandidate'])->name('register.candidate.store');
 
    Route::middleware(['auth'])->group(function () {
        Route::get('/dashboard', function () {
@@ -41,6 +40,44 @@ Route::get('/', function () {
    });
 
    require __DIR__.'/auth.php';
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+
+
+
+//    Route::get('/', function () {
+//        return view('welcome');
+//    });
+
+//    Route::middleware(['auth'])->group(function () {
+//        Route::get('/dashboard', function () {
+//            $user = auth()->user();
+//            if ($user->isAdmin()) {
+//                return redirect()->route('admin.dashboard');
+//            } elseif ($user->isEmployer()) {
+//                return redirect()->route('employer.dashboard');
+//            } else {
+//                return redirect()->route('candidate.dashboard');
+//            }
+//        })->name('dashboard');
+
+//        Route::get('/admin/dashboard', function () {
+//            return view('admin.dashboard');
+//        })->name('admin.dashboard');
+
+//        Route::get('/employer/dashboard', function () {
+//            return view('employer.dashboard');
+//        })->name('employer.dashboard');
+
+//        Route::get('/candidate/dashboard', function () {
+//            return view('candidate.dashboard');
+//        })->name('candidate.dashboard');
+//    });
+
+//    require __DIR__.'/auth.php';
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

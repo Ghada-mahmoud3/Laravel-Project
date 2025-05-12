@@ -1,6 +1,6 @@
 <x-guest-layout>
        <div class="mb-4 text-sm text-gray-600">
-           {{ __('Register as an Employer') }}
+           {{ __('Register as a Candidate') }}
        </div>
 
        @if ($errors->any())
@@ -16,7 +16,7 @@
            </div>
        @endif
 
-       <form method="POST" action="{{ route('register.employer.store') }}" enctype="multipart/form-data">
+       <form method="POST" action="{{ route('register.candidate.store') }}" enctype="multipart/form-data">
            @csrf
 
            <!-- Name -->
@@ -43,16 +43,16 @@
                <input id="password_confirmation" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="password" name="password_confirmation" required autocomplete="new-password" />
            </div>
 
-           <!-- Company Name -->
+           <!-- Resume -->
            <div class="mt-4">
-               <label for="company_name" class="block text-sm font-medium text-gray-700">{{ __('Company Name') }}</label>
-               <input id="company_name" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="text" name="company_name" value="{{ old('company_name') }}" required />
+               <label for="resume" class="block text-sm font-medium text-gray-700">{{ __('Resume (Optional)') }}</label>
+               <input id="resume" class="block mt-1 w-full" type="file" name="resume" accept=".pdf,.doc,.docx" />
            </div>
 
-           <!-- Company Logo -->
+           <!-- Skills -->
            <div class="mt-4">
-               <label for="company_logo" class="block text-sm font-medium text-gray-700">{{ __('Company Logo (Optional)') }}</label>
-               <input id="company_logo" class="block mt-1 w-full" type="file" name="company_logo" accept="image/*" />
+               <label for="skills" class="block text-sm font-medium text-gray-700">{{ __('Skills (Optional)') }}</label>
+               <textarea id="skills" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="skills">{{ old('skills') }}</textarea>
            </div>
 
            <div class="flex items-center justify-end mt-4">

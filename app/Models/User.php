@@ -43,4 +43,14 @@
        {
            return $this->role === 'candidate';
        }
+
+       public function employerProfile()
+       {
+           return $this->hasOne(EmployerProfile::class);
+       }
+
+       public function candidateProfile()
+       {
+           return $this->hasOne(CandidateProfile::class);
+       }
    }
