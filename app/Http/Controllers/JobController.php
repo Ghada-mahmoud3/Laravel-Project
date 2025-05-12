@@ -38,4 +38,10 @@ class JobController extends Controller
     }
 
 
+    function show($id){
+        $job = Job::with('employer')->findOrFail($id);
+        return view("jobs.show",["job"=>$job]);                 
+    }
+
+
 }

@@ -12,24 +12,30 @@ class ApplicationController extends Controller
     $applications = auth()->user()->applications()->with('job')->latest()->get();
     return view('applications.index', compact('applications'));
 }
-    public function store(Request $request)
-    {
-        $request->validate([
-            'resume' => 'required|file|mimes:pdf,doc,docx|max:2048',
-            'job_id' => 'required|exists:jobs,id',
-        ]);
+public function store(Request $request)
+{
+    $request->validate([
+        'job_id' => 'required|exists:jobs_listing,id',
+        'resume' => 'required|mimes:pdf,doc,docx|max:2048',
+        'email' => 'required|email:rfc,dns|max:255',
+        'phone' => 'required|regex:/^\+?[0-9]{8,15}$/',
+        'message' => 'nullable|string|max:1000',
+    ]);
 
-        $path = $request->file('resume')->store('resumes');
+    $resumePath = $request->file('resume')->store('resumes');
 
-        Application::create([
-            'user_id' => auth()->id(),
-            'job_id' => $request->job_id,
-            'resume_path' => $path,
-            'status' => 'pending',
-        ]);
+    Application::create([
+        'user_id' => auth()->id(),
+        'job_id' => $request->job_id,
+        'resume_path' => $resumePath,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'message' => $request->message,
+        'status' => 'pending',
+    ]);
 
-        return redirect()->back()->with('success', 'Application submitted.');
-    }
+    return redirect()->back()->with('success', 'Application submitted successfully.');
+}
 
     public function destroy($id)
     {

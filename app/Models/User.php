@@ -47,8 +47,13 @@ class User extends Authenticatable
     }
 
     public function applications()
-{
-    return $this->hasMany(Application::class);
-}
+    {
+        return $this->hasMany(Application::class);
+    }
+
+    public function candidate()
+    {
+        return $this->hasOne(Candidate::class);
+    }
 
 }

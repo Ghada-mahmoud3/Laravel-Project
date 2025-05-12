@@ -69,7 +69,7 @@
                 <div class="col">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title">{{ $job->title }}</h5>
+                            <strong><a href="show/{{ $job->id}}" class="card-title">{{ $job->title }}</a></strong>
                             <p class="card-text">{{ Str::limit($job->description, 120) }}</p>
                             <p class="text-muted">Location: {{ $job->location }} | Category: {{ $job->category }}</p>
                         </div>
@@ -78,6 +78,8 @@
                         </div>
                     </div>
                 </div>
+                <br>
+                <hr>
             @endforeach
         </div>
 
@@ -88,11 +90,9 @@
     </div>
 
     <script>
-        // Reset form function
+        
         function resetForm() {
-            // Reset form inputs
             document.querySelector('form').reset();
-            // Optionally, reload the page to clear any query parameters
             window.location.href = "{{ route('jobs.search') }}";
         }
     </script>

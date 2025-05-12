@@ -6,7 +6,9 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/jobs/search', [JobController::class, 'search'])->name('jobs.search');
+Route::get('/jobs/show/{id}', [JobController::class, 'show'])->name('jobs.show');
 
+Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
 Route::post('/applications', [ApplicationController::class, 'store'])->name('applications.store');
 Route::delete('/applications/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
 
