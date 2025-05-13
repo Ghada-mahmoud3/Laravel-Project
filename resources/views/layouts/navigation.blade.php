@@ -3,20 +3,45 @@
         <div class="flex justify-between h-16 items-center">
             <!-- Logo + Brand -->
             <div class="flex items-center space-x-3">
+            @if (Auth::user()->role == 'candidate')
                 <a href="{{ route('jobs.search') }}" class="flex items-center space-x-2">
-                    <!-- <x-application-logo class="h-8 w-8 text-indigo-600" /> -->
                     <span class="text-xl font-bold text-indigo-700">Job Board</span>
                 </a>
+
+            @elseif (Auth::user()->role == 'employer')    
+
+            @elseif (Auth::user()->role == 'admin')
+                  <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-2">
+                    <span class="text-xl font-bold text-indigo-700">Job Board</span>
+                    </a>
+            @endif
                 <!-- Primary Links -->
                 <div class="hidden sm:flex space-x-6 ml-10">
                     <!-- <a href="{{ route('dashboard') }}"
                         class="text-sm font-medium {{ request()->routeIs('dashboard') ? 'text-indigo-600' : 'text-gray-600 hover:text-indigo-600' }} transition">
                         Dashboard
                     </a> -->
+                    <!-- @if (Auth::user()->role == 'candidate')
                     <a href="/applications"
                         class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Applications</a>
                     <a href="/profile"
                         class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Profile</a>
+                    @endif -->
+
+                    @if (Auth::user()->role == 'candidate')
+                        <a href="/applications" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Applications</a>
+                         <a href="/profile" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Profile</a>
+
+                    @elseif (Auth::user()->role == 'employer')
+                          <a href="/jobs" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">My Jobs</a>
+                            <a href="/profile" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Profile</a>
+
+                    @elseif (Auth::user()->role == 'admin')
+                       <a href="/admin/jobs" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Jobs</a>
+                        <a href="/admin/users" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Users</a>
+                    @endif
+
+                   
                 </div>
             </div>
 

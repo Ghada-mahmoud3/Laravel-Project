@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="text-3xl font-extrabold text-gray-900 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Job Details') }}
         </h2>
     </x-slot>
@@ -21,6 +21,7 @@
             </div>
         </div>
 
+        @if (Auth::user()->role == 'candidate')
         <form action="{{ route('applications.store') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl shadow-md p-6 mt-8 space-y-6">
             @csrf
             <input type="hidden" name="job_id" value="{{ $job->id }}">
@@ -69,5 +70,6 @@
                 </button>
             </div>
         </form>
+        @endif
     </div>
 </x-app-layout>

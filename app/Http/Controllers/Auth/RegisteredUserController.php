@@ -73,10 +73,16 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'resume' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:2048'], // Max 2MB
-            'skills' => ['nullable', 'string'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'skills' => ['nullable', 'string', 'max:1000'],
+            'bio' => ['nullable', 'string', 'max:1000'],
+            'location' => ['nullable', 'string', 'max:255'],
+            'experience' => ['nullable', 'string', 'max:1000'],
+            'education' => ['nullable', 'string', 'max:1000'],
+            'resume' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:2048'],
         ]);
 
+        // Create user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -84,22 +90,30 @@ class RegisteredUserController extends Controller
             'role' => 'candidate',
         ]);
 
-        // Create candidate profile
-        $candidateProfile = CandidateProfile::create([
+        // Prepare profile data
+        $profileData = [
             'user_id' => $user->id,
+            'phone' => $request->phone,
             'skills' => $request->skills,
-        ]);
+            'bio' => $request->bio,
+            'location' => $request->location,
+            'experience' => $request->experience,
+            'education' => $request->education,
+        ];
 
-        // Handle resume upload
+
         if ($request->hasFile('resume')) {
             $path = $request->file('resume')->store('resumes', 'public');
-            $candidateProfile->update(['resume' => $path]);
+            $profileData['resume'] = $path;
         }
 
-        event(new Registered($user));
 
+        CandidateProfile::create($profileData);
+
+        event(new Registered($user));
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect()->route('dashboard');
     }
+
 }

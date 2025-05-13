@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Candidate;
+use App\Models\CandidateProfile;
+
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +16,7 @@ class ProfileController extends Controller
     public function show()
     {
         $user = auth()->user();
-        $candidate = $user->candidate;
+        $candidate = $user->candidateProfile;
 
         return view('profile.show', compact('user', 'candidate'));
     }
@@ -28,49 +30,61 @@ class ProfileController extends Controller
     // }
 
     public function update(Request $request)
-    {
+{
+    $user = auth()->user();
+    $candidate = $user->candidateProfile;
 
-        if ($request->user()->isDirty('email')) {
-            $request->user()->email_verified_at = null;
-        }
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'phone' => 'nullable|string|max:20',
+        'skills' => 'nullable|string|max:1000',
+        'bio' => 'nullable|string|max:1000',
+        'location' => 'nullable|string|max:255',
+        'experience' => 'nullable|string|max:1000',
+        'education' => 'nullable|string|max:1000',
+        'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
+    ]);
 
-        $user = auth()->user();
-        $candidate = $user->candidate;
+    // Update user name
+    $user->update([
+        'name' => $request->name,
+    ]);
 
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'skills' => 'nullable|string|max:1000',
-            'resume' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
-            'bio' => 'nullable|string|max:1000',
-        ]);
-
-        $user->update([
-            'name' => $request->name,
-        ]);
-
-        if (!$candidate) {
-            $candidate = new Candidate(['user_id' => $user->id]);
-        }
-
-        $candidate->phone = $request->phone;
-        $candidate->skills = $request->skills;
-        $candidate->bio = $request->bio;
-
-        if ($request->hasFile('resume')) {
-            $path = $request->file('resume')->store('resumes');
-            $candidate->resume_path = $path;
-        }
-
-        $candidate->save();
-
-        return back()->with('success', 'Profile updated successfully.');
+    // Create a new profile if one doesn't exist
+    if (!$candidate) {
+        $candidate = new \App\Models\CandidateProfile(); // Make sure to use the correct model
+        $candidate->user_id = $user->id;
     }
+
+    // Update candidate profile fields
+    $candidate->phone = $request->phone;
+    $candidate->skills = $request->skills;
+    $candidate->bio = $request->bio;
+    $candidate->location = $request->location;
+    $candidate->experience = $request->experience;
+    $candidate->education = $request->education;
+
+    // Handle resume upload
+    if ($request->hasFile('resume')) {
+        $path = $request->file('resume')->store('resumes', 'public');
+        $candidate->resume = $path; // ✅ Use correct column name
+    }
+
+    $candidate->save();
+
+    return back()->with('success', 'Profile updated successfully.');
+}
+
+
 
     public function edit(Request $request): View
     {
+        $user = $request->user();
+        $candidate = $user->candidateProfile;
+    
         return view('profile.edit', [
-            'user' => $request->user(),
+            'user' => $user,
+            'candidate' => $candidate,
         ]);
     }
 

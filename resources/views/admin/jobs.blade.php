@@ -34,7 +34,7 @@
                         <tbody>
                             @foreach ($jobs as $job)
                                 <tr>
-                                    <td class="px-6 py-4 whitespace-no-wrap">{{ $job->title }}</td>
+                                    <td class="px-6 py-4 whitespace-no-wrap"><a href="/jobs/show/{{ $job->id }}">{{ $job->title }}</a></td>
                                     <td class="px-6 py-4 whitespace-no-wrap">{{ $job->employer->name }}</td>
                                     <td class="px-6 py-4 whitespace-no-wrap">
                                         @if ($job->is_approved)

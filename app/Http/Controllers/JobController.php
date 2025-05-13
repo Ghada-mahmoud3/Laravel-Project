@@ -10,11 +10,21 @@ class JobController extends Controller
 {
     public function search(Request $request)
     {
-        $locations = Job::distinct()->pluck('location');
-        $categories = Job::distinct()->pluck('category');
-        $experienceLevels = Job::distinct()->pluck('experience_level');
+        $locations = Job::where('is_approved', true)
+            ->distinct()
+            ->pluck('location');
+
+        $categories = Job::where('is_approved', true)
+            ->distinct()
+            ->pluck('category');
+
+        $experienceLevels = Job::where('is_approved', true)
+            ->distinct()
+            ->pluck('experience_level');
+
 
         $jobs = Job::query()
+            ->where('is_approved', true)
             ->when($request->keyword, function ($q) use ($request) {
                 $q->where('title', 'like', '%' . $request->keyword . '%')
                     ->orWhere('description', 'like', '%' . $request->keyword . '%');
@@ -38,9 +48,10 @@ class JobController extends Controller
     }
 
 
-    function show($id){
+    function show($id)
+    {
         $job = Job::with('employer')->findOrFail($id);
-        return view("jobs.show",["job"=>$job]);                 
+        return view("jobs.show", ["job" => $job]);
     }
 
 

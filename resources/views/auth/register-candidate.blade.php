@@ -1,68 +1,129 @@
 <x-guest-layout>
-       <div class="mb-4 text-sm text-gray-600">
-           {{ __('Register as a Candidate') }}
-       </div>
+<div class="mb-6 text-lg font-semibold text-gray-700 text-center">
+    {{ __('Register as a Candidate') }}
+</div>
 
-       @if ($errors->any())
-           <div class="mb-4">
-               <div class="font-medium text-red-600">
-                   {{ __('Whoops! Something went wrong.') }}
-               </div>
-               <ul class="mt-3 list-disc list-inside text-sm text-red-600">
-                   @foreach ($errors->all() as $error)
-                       <li>{{ $error }}</li>
-                   @endforeach
-               </ul>
-           </div>
-       @endif
 
-       <form method="POST" action="{{ route('register.candidate.store') }}" enctype="multipart/form-data">
-           @csrf
+    @if ($errors->any())
+        <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <div class="font-medium">{{ __('Whoops! Something went wrong.') }}</div>
+            <ul class="mt-2 list-disc list-inside text-sm">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
-           <!-- Name -->
-           <div>
-               <label for="name" class="block text-sm font-medium text-gray-700">{{ __('Name') }}</label>
-               <input id="name" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name" />
-           </div>
+    <form method="POST" action="{{ route('register.candidate.store') }}" enctype="multipart/form-data" class="space-y-6">
+        @csrf
 
-           <!-- Email Address -->
-           <div class="mt-4">
-               <label for="email" class="block text-sm font-medium text-gray-700">{{ __('Email') }}</label>
-               <input id="email" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="email" name="email" value="{{ old('email') }}" required autocomplete="username" />
-           </div>
+        <!-- Section: Personal Info -->
+        <div class="border-b pb-4">
+            <h2 class="text-md font-semibold text-gray-800 mb-4">Personal Information</h2>
 
-           <!-- Password -->
-           <div class="mt-4">
-               <label for="password" class="block text-sm font-medium text-gray-700">{{ __('Password') }}</label>
-               <input id="password" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="password" name="password" required autocomplete="new-password" />
-           </div>
+            <!-- Name -->
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                <input id="name" name="name" type="text" value="{{ old('name') }}" required autofocus
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
 
-           <!-- Confirm Password -->
-           <div class="mt-4">
-               <label for="password_confirmation" class="block text-sm font-medium text-gray-700">{{ __('Confirm Password') }}</label>
-               <input id="password_confirmation" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" type="password" name="password_confirmation" required autocomplete="new-password" />
-           </div>
+            <!-- Email -->
+            <div class="mt-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input id="email" name="email" type="email" value="{{ old('email') }}" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
 
-           <!-- Resume -->
-           <div class="mt-4">
-               <label for="resume" class="block text-sm font-medium text-gray-700">{{ __('Resume (Optional)') }}</label>
-               <input id="resume" class="block mt-1 w-full" type="file" name="resume" accept=".pdf,.doc,.docx" />
-           </div>
+            <!-- Phone -->
+            <div class="mt-4">
+                <label for="phone" class="block text-sm font-medium text-gray-700">Phone (Optional)</label>
+                <input id="phone" name="phone" type="text" value="{{ old('phone') }}"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
 
-           <!-- Skills -->
-           <div class="mt-4">
-               <label for="skills" class="block text-sm font-medium text-gray-700">{{ __('Skills (Optional)') }}</label>
-               <textarea id="skills" class="block mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="skills">{{ old('skills') }}</textarea>
-           </div>
+            <!-- Location -->
+            <div class="mt-4">
+                <label for="location" class="block text-sm font-medium text-gray-700">Location (Optional)</label>
+                <input id="location" name="location" type="text" value="{{ old('location') }}"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
+        </div>
 
-           <div class="flex items-center justify-end mt-4">
-               <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('register') }}">
-                   {{ __('Choose another role') }}
-               </a>
+        <!-- Section: Security -->
+        <div class="border-b pb-4">
+            <h2 class="text-md font-semibold text-gray-800 mb-4">Account Security</h2>
 
-               <button type="submit" class="ml-4 inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                   {{ __('Register') }}
-               </button>
-           </div>
-       </form>
-   </x-guest-layout>
+            <!-- Password -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input id="password" name="password" type="password" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="mt-4">
+                <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <input id="password_confirmation" name="password_confirmation" type="password" required
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
+        </div>
+
+        <!-- Section: Professional Info -->
+        <div class="border-b pb-4">
+            <h2 class="text-md font-semibold text-gray-800 mb-4">Professional Information</h2>
+
+            <!-- Skills -->
+            <div>
+                <label for="skills" class="block text-sm font-medium text-gray-700">Skills (Optional)</label>
+                <textarea id="skills" name="skills" rows="3"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('skills') }}</textarea>
+            </div>
+
+            <!-- Bio -->
+            <div class="mt-4">
+                <label for="bio" class="block text-sm font-medium text-gray-700">Bio (Optional)</label>
+                <textarea id="bio" name="bio" rows="3"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('bio') }}</textarea>
+            </div>
+
+            <!-- Experience -->
+            <div class="mt-4">
+                <label for="experience" class="block text-sm font-medium text-gray-700">Experience (Optional)</label>
+                <textarea id="experience" name="experience" rows="3"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('experience') }}</textarea>
+            </div>
+
+            <!-- Education -->
+            <div class="mt-4">
+                <label for="education" class="block text-sm font-medium text-gray-700">Education (Optional)</label>
+                <textarea id="education" name="education" rows="3"
+                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500">{{ old('education') }}</textarea>
+            </div>
+        </div>
+
+        <!-- Section: Resume Upload -->
+        <div>
+            <h2 class="text-md font-semibold text-gray-800 mb-4">Resume</h2>
+            <label for="resume" class="block text-sm font-medium text-gray-700">Resume (PDF, DOC)</label>
+            <input id="resume" name="resume" type="file" accept=".pdf,.doc,.docx"
+                class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
+                       file:rounded-md file:border-0
+                       file:text-sm file:font-semibold
+                       file:bg-indigo-50 file:text-indigo-700
+                       hover:file:bg-indigo-100" />
+        </div>
+
+        <!-- Submit -->
+        <div class="flex items-center justify-between pt-4">
+            <a href="{{ route('register') }}" class="text-sm text-gray-600 hover:text-gray-900 underline">
+                {{ __('Choose another role') }}
+            </a>
+            <button type="submit"
+                class="inline-flex items-center px-6 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-sm text-white tracking-wide hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                Register
+            </button>
+        </div>
+    </form>
+</x-guest-layout>

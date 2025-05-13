@@ -18,5 +18,8 @@ class DatabaseSeeder extends Seeder
 
         // Seed jobs
         $this->call(JobSeeder::class);
+
+        
+        $this->call(AdminUserSeeder::class);
     }
 }
