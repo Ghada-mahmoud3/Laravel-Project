@@ -53,4 +53,9 @@
        {
            return $this->hasOne(CandidateProfile::class);
        }
+
+       public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
    }

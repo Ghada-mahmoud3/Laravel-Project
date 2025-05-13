@@ -1,26 +1,40 @@
-<div class="container mt-5">
-    <h2>My Applications</h2>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-4xl text-gray-900 leading-tight">
+            {{ __('My Applications') }}
+        </h2>
+    </x-slot>
 
-    @foreach($applications as $application)
-        <div class="card mb-3">
-            <div class="card-body d-flex justify-content-between">
-                <div>
-                    <strong>{{ $application->job->title }}</strong><br>
-                    Applied on: {{ $application->created_at->format('M d, Y') }}<br>
-                    Status: 
-                    <span class="badge 
-                        {{ 
-                            $application->status == 'accepted' ? 'bg-success' : 
-                            ($application->status == 'rejected' ? 'bg-danger' : 
-                            ($application->status == 'cancelled' ? 'bg-secondary' : 'bg-warning')) 
-                        }}">
-                        {{ ucfirst($application->status) }}
-                    </span>
+    <div class="container mt-8 px-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($applications as $application)
+                <div class="bg-white shadow-lg rounded-lg p-6 transition-shadow duration-300 hover:shadow-xl transform hover:scale-105">
+                    <div class="flex justify-between items-start">
+                        <!-- Job Title and Details -->
+                        <div class="flex-1">
+                            <strong class="text-2xl font-semibold text-gray-800">{{ $application->job->title }}</strong><br>
+                            <span class="text-sm text-gray-600">Applied on: <span class="font-medium">{{ $application->created_at->format('M d, Y') }}</span></span><br>
+                            <span class="text-sm text-gray-600">Status: </span>
+                            <span class="inline-block px-3 py-1 text-sm rounded-full 
+                                {{ 
+                                    $application->status == 'accepted' ? 'bg-green-100 text-green-800' : 
+                                    ($application->status == 'rejected' ? 'bg-red-100 text-red-800' : 
+                                    ($application->status == 'cancelled' ? 'bg-gray-200 text-gray-600' : 'bg-yellow-100 text-yellow-800')) 
+                                }}">
+                                {{ ucfirst($application->status) }}
+                            </span>
+                        </div>
+
+                        <div class="ml-4">
+                            <a href="{{ asset('storage/' . $application->resume_path) }}" 
+                               class="bg-blue-600 text-white px-5 py-2 rounded-md text-sm font-semibold shadow-md hover:bg-blue-700 transition-all duration-200 ease-in-out" 
+                               target="_blank">
+                                View Resume
+                            </a>
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    <a href="{{ asset('storage/' . $application->resume_path) }}" class="btn btn-sm btn-outline-primary" target="_blank">Resume</a>
-                </div>
-            </div>
+            @endforeach
         </div>
-    @endforeach
-</div>
+    </div>
+</x-app-layout>

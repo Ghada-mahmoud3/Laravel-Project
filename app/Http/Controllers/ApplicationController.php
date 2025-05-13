@@ -12,6 +12,7 @@ class ApplicationController extends Controller
     $applications = auth()->user()->applications()->with('job')->latest()->get();
     return view('applications.index', compact('applications'));
 }
+
 public function store(Request $request)
 {
     $request->validate([
@@ -22,7 +23,8 @@ public function store(Request $request)
         'message' => 'nullable|string|max:1000',
     ]);
 
-    $resumePath = $request->file('resume')->store('resumes');
+    
+    $resumePath = $request->file('resume')->store('resumes','public');
 
     Application::create([
         'user_id' => auth()->id(),

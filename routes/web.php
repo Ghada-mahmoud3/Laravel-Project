@@ -14,7 +14,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
     Route::post('/applications', [ApplicationController::class, 'store'])->name('applications.store');
-    Route::delete('/applications/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
+    // Route::delete('/applications/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
 
 
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
