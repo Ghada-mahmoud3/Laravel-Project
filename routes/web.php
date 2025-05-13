@@ -7,6 +7,15 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ProfileController;
 
+use App\Http\Controllers\AdminController;
+
+Route::middleware('auth')->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/users', [AdminController::class, 'showUsers'])->name('admin.users');
+    Route::get('/admin/jobs', [AdminController::class, 'jobs'])->name('admin.jobs');
+    Route::post('/admin/jobs/{id}/approve', [AdminController::class, 'approveJob'])->name('admin.jobs.approve');
+    Route::post('/admin/jobs/{id}/reject', [AdminController::class, 'rejectJob'])->name('admin.jobs.reject');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/jobs/search', [JobController::class, 'search'])->name('jobs.search');
@@ -51,9 +60,9 @@ Route::middleware(['auth'])->group(function () {
         }
     })->name('dashboard');
 
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    // Route::get('/admin/dashboard', function () {
+    //     return view('admin.dashboard');
+    // })->name('admin.dashboard');
 
     Route::get('/employer/dashboard', function () {
         return view('employer.dashboard');

@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Job;
+
+class AdminController extends Controller
+{
+    public function dashboard()
+    {
+        // $users = User::all(); // Fetch all users
+        return view('admin.dashboard');
+    }
+
+    public function showUsers()
+    {
+        $users = User::paginate(10); // Paginate users (10 per page)
+        return view('admin.users', compact('users'));
+    }
+
+
+    public function jobs(Request $request)
+    {
+        // Filter jobs based on approval status
+        $status = $request->input('status'); // 'approved', 'rejected', or null (show all)
+
+        $query = Job::query();
+
+        if ($status === 'approved') {
+            $query->where('is_approved', true);
+        } elseif ($status === 'rejected') {
+            $query->where('is_approved', false);
+        }
+
+        $jobs = $query->paginate(10); // Paginate results
+
+        return view('admin.jobs', compact('jobs', 'status'));
+    }
+
+    public function approveJob($id)
+    {
+        $job = Job::findOrFail($id);
+        $job->update(['is_approved' => true]);
+
+        return redirect()->back()->with('success', 'Job approved successfully.');
+    }
+
+    public function rejectJob($id)
+    {
+        $job = Job::findOrFail($id);
+        $job->update(['is_approved' => false]);
+
+        return redirect()->back()->with('success', 'Job rejected successfully.');
+    }
+}

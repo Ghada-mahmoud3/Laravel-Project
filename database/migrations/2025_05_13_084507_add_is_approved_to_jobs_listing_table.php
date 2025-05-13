@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('candidates', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('jobs_listing', function (Blueprint $table) {
+            $table->boolean('is_approved')->default(false);
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('candidates');
+        Schema::table('jobs_listing', function (Blueprint $table) {
+            //
+        });
     }
 };

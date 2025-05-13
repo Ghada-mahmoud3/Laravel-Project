@@ -8,7 +8,8 @@ use Laravel\Scout\Searchable;
 
 class Job extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory;
+    // use Searchable;
 
     protected $table = 'jobs_listing';
     protected $fillable = [
@@ -23,6 +24,7 @@ class Job extends Model
         'application_deadline',
         'employer_id',
         'logo_path',
+        'is_approved',
     ];
 
     public function toSearchableArray()
