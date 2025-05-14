@@ -26,6 +26,10 @@ class JobController extends Controller
             ->distinct()
             ->pluck('experience_level');
 
+        $work_types = Job::where('is_approved', true)
+            ->distinct()
+            ->pluck('work_type');
+
 
         $jobs = Job::query()
             ->where('is_approved', true)
@@ -35,6 +39,7 @@ class JobController extends Controller
             })
             ->when($request->location, fn($q) => $q->where('location', 'like', '%' . $request->location . '%'))
             ->when($request->category, fn($q) => $q->where('category', 'like', '%' . $request->category . '%'))
+            ->when($request->work_type, fn($q) => $q->where('work_type', 'like', '%' . $request->work_type . '%')) // <-- Added
             ->when($request->experienceLevel, fn($q) => $q->where('experience_level', 'like', '%' . $request->experienceLevel . '%'))
             ->when($request->salaryRange, function ($q) use ($request) {
                 if (strpos($request->salaryRange, '-') !== false) {
@@ -48,7 +53,8 @@ class JobController extends Controller
             ->paginate(10);
 
 
-        return view('jobs.index', compact('jobs', 'locations', 'categories', 'experienceLevels'));
+        return view('jobs.index', compact('jobs', 'locations', 'categories', 'experienceLevels', 'work_types'));
+
     }
 
     public function index()
@@ -71,9 +77,6 @@ class JobController extends Controller
         $job = Job::with('employer')->findOrFail($id);
         return view("jobs.show", ["job" => $job]);
     }
-
-
-    // عرض فورم إنشاء وظيفة
     public function create()
     {
         return view('jobs.create');
@@ -142,7 +145,7 @@ class JobController extends Controller
                 'logo_path' => $logoPath,
             ]);
 
-            return redirect()->route('jobs.index')->with('success', 'Job created successfully.');
+            return redirect()->route('employer.applications.index')->with('success', 'Job created successfully.');
         } catch (\Exception $e) {
             Log::error('Exception in job creation: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());

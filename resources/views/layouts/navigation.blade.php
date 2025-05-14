@@ -4,11 +4,14 @@
             <!-- Logo + Brand -->
             <div class="flex items-center space-x-3">
             @if (Auth::user()->role == 'candidate')
-                <a href="{{ route('jobs.search') }}" class="flex items-center space-x-2">
+            <a href="{{ route('candidate.dashboard') }}" class="flex items-center space-x-2">
                     <span class="text-xl font-bold text-indigo-700">Job Board</span>
-                </a>
+                    </a>
 
-            @elseif (Auth::user()->role == 'employer')    
+            @elseif (Auth::user()->role == 'employer')  
+              <a href="{{ route('employer.dashboard') }}" class="flex items-center space-x-2">
+                    <span class="text-xl font-bold text-indigo-700">Job Board</span>
+                    </a>
 
             @elseif (Auth::user()->role == 'admin')
                   <a href="{{ route('admin.dashboard') }}" class="flex items-center space-x-2">
@@ -29,13 +32,18 @@
                     @endif -->
 
                     @if (Auth::user()->role == 'candidate')
+                    <a href="{{ route('jobs.search') }}" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Find jobs</a>
                         <a href="/applications" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Applications</a>
                          <a href="/profile" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Profile</a>
 
                     @elseif (Auth::user()->role == 'employer')
-                          <a href="/jobs" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">My Jobs</a>
-                            <a href="/profile" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Profile</a>
+                    <a href="{{ route('jobs.create') }}" class="text-sm font-medium {{ request()->routeIs('jobs.create') ? 'text-indigo-600' : 'text-gray-600 hover:text-indigo-600' }} transition">
+                                Create Job
+                            </a>
 
+                            <a href="{{ route('employer.applications.index') }}" class="text-sm font-medium {{ request()->routeIs('employer.applications.*') ? 'text-indigo-600' : 'text-gray-600 hover:text-indigo-600' }} transition">
+                                Manage Applications
+                            </a>
                     @elseif (Auth::user()->role == 'admin')
                        <a href="/admin/jobs" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Jobs</a>
                         <a href="/admin/users" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Users</a>

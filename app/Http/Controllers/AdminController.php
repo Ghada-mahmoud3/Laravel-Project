@@ -34,7 +34,7 @@ class AdminController extends Controller
             $query->where('is_approved', false);
         }
 
-        $jobs = $query->paginate(10); // Paginate results
+        $jobs = $query->paginate(10);
 
         return view('admin.jobs', compact('jobs', 'status'));
     }
@@ -43,6 +43,7 @@ class AdminController extends Controller
     {
         $job = Job::findOrFail($id);
         $job->update(['is_approved' => true]);
+        $job->save();        
 
         return redirect()->back()->with('success', 'Job approved successfully.');
     }
@@ -51,6 +52,7 @@ class AdminController extends Controller
     {
         $job = Job::findOrFail($id);
         $job->update(['is_approved' => false]);
+        $job->save();
 
         return redirect()->back()->with('success', 'Job rejected successfully.');
     }

@@ -74,6 +74,7 @@ class Job extends Model
         'work_type',
         'application_deadline',
         'logo_path',
+        'is_approved',
     ];
 
     // العلاقات مع الجداول الأخرى

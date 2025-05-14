@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Models\User;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\ProfileController;
@@ -32,7 +32,7 @@ Route::prefix('employer')->middleware(['auth'])->group(function () {
 // Route::post('jobs', [JobController::class, 'store'])->name('jobs.store');
 // Route::get('/jobs/{id}', [JobController::class, 'show'])->name('jobs.show');
 
-// تأكد من أن هذه الطرق موجودة ومرتبة بشكل صحيح
+
 Route::middleware('auth')->group(function () {
     Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
     Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create');
@@ -62,10 +62,10 @@ Route::middleware('auth')->group(function () {
     // Route::delete('/applications/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
 
 
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
-    Route::get('/profile/{id}', [ProfileController::class, 'showOther'])->name('profile.show.other');
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');    
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile/{id}', [ProfileController::class, 'showOther'])->name('profile.show.other');
 
 });
 
@@ -75,9 +75,8 @@ Route::get('/notifications', function () {
 })->middleware('auth');
 
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AuthenticatedSessionController::class, 'create'])
+->name('login');
 
 Route::get('/register', [RegisteredUserController::class, 'roleSelection'])->name('register');
 Route::get('/register/employer', [RegisteredUserController::class, 'createEmployer'])->name('register.employer');

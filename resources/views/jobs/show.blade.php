@@ -93,6 +93,7 @@
             </div>
         </div>
 
+        @if (Auth::user()->role == 'candidate')
         <form action="{{ route('applications.store') }}" method="POST" enctype="multipart/form-data" class="bg-white rounded-2xl shadow-md p-6 mt-8 space-y-6">
             @csrf
             <input type="hidden" name="job_id" value="{{ $job->id }}">
@@ -141,5 +142,7 @@
                 </button>
             </div>
         </form>
+        @endif
+        
     </div>
 </x-app-layout>

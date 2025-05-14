@@ -43,14 +43,14 @@ class ApplicationReviewController extends Controller
         // التحقق من أن المستخدم هو صاحب الوظيفة
         $job = Job::findOrFail($application->job_id);
         if ($job->employer_id !== Auth::id()) {
-            return redirect()->back()->with('error', 'غير مصرح لك بتنزيل هذا الملف');
+            return redirect()->back()->with('error', 'You are not authorized to change the status of this application.');
         }
 
         if (Storage::disk('public')->exists($application->resume_path)) {
             return response()->download(Storage::disk('public')->path($application->resume_path));
         }
 
-        return redirect()->back()->with('error', 'الملف غير موجود');
+        return redirect()->back()->with('error', 'File not found.');
     }
 
     // قبول الطلب
@@ -61,13 +61,13 @@ class ApplicationReviewController extends Controller
         // التحقق من أن المستخدم هو صاحب الوظيفة
         $job = Job::findOrFail($application->job_id);
         if ($job->employer_id !== Auth::id()) {
-            return redirect()->back()->with('error', 'غير مصرح لك بتغيير حالة هذا الطلب');
+            return redirect()->back()->with('error', 'You are not authorized to change the status of this application.');
         }
 
         $application->status = 'accepted';
         $application->save();
 
-        return redirect()->back()->with('success', 'تم قبول الطلب بنجاح');
+        return redirect()->back()->with('success', 'Application accepted successfully.');
     }
 
     // رفض الطلب
@@ -78,12 +78,12 @@ class ApplicationReviewController extends Controller
         // التحقق من أن المستخدم هو صاحب الوظيفة
         $job = Job::findOrFail($application->job_id);
         if ($job->employer_id !== Auth::id()) {
-            return redirect()->back()->with('error', 'غير مصرح لك بتغيير حالة هذا الطلب');
+            return redirect()->back()->with('error', 'You are not authorized to change the status of this application.');
         }
 
         $application->status = 'rejected';
         $application->save();
 
-        return redirect()->back()->with('success', 'تم رفض الطلب بنجاح');
+        return redirect()->back()->with('success', 'Application rejected successfully.');
     }
 }
