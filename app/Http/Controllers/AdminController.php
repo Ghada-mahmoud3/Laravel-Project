@@ -20,6 +20,31 @@ class AdminController extends Controller
         return view('admin.users', compact('users'));
     }
 
+    public function viewUser($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.user-details', compact('user'));
+    }
+
+    public function changeRole(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $newRole = $request->input('role');
+
+        $user->update(['role' => $newRole]);
+
+        return redirect()->back()->with('success', 'User role updated successfully.');
+    }
+
+    public function toggleBan($id)
+    {
+        $user = User::findOrFail($id);
+
+        $user->update(['is_banned' => !$user->is_banned]);
+
+        return redirect()->back()->with('success', $user->is_banned ? 'User banned successfully.' : 'User unbanned successfully.');
+    }
+
 
     public function jobs(Request $request)
     {
@@ -43,7 +68,7 @@ class AdminController extends Controller
     {
         $job = Job::findOrFail($id);
         $job->update(['is_approved' => true]);
-        $job->save();        
+        $job->save();
 
         return redirect()->back()->with('success', 'Job approved successfully.');
     }

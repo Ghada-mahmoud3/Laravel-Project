@@ -13,6 +13,9 @@ use App\Http\Controllers\AdminController;
 Route::middleware('auth')->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/users', [AdminController::class, 'showUsers'])->name('admin.users');
+    Route::get('/admin/users/view/{id}', [AdminController::class, 'viewUser'])->name('admin.users.view');
+    Route::post('/admin/users/change-role/{id}', [AdminController::class, 'changeRole'])->name('admin.users.change-role');
+    Route::post('/admin/users/toggle-ban/{id}', [AdminController::class, 'toggleBan'])->name('admin.users.toggle-ban');
     Route::get('/admin/jobs', [AdminController::class, 'jobs'])->name('admin.jobs');
     Route::post('/admin/jobs/{id}/approve', [AdminController::class, 'approveJob'])->name('admin.jobs.approve');
     Route::post('/admin/jobs/{id}/reject', [AdminController::class, 'rejectJob'])->name('admin.jobs.reject');
@@ -62,7 +65,7 @@ Route::middleware('auth')->group(function () {
     // Route::delete('/applications/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
 
 
-    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');    
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/{id}', [ProfileController::class, 'showOther'])->name('profile.show.other');

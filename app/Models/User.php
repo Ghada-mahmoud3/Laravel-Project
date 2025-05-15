@@ -17,6 +17,7 @@
            'email',
            'password',
            'role',
+           'is_banned',
        ];
 
        protected $hidden = [
