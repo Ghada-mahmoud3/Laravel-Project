@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Application;
+use App\Models\Job;
+use App\Notifications\NewApplicationNotification;
 
 class ApplicationController extends Controller
 {
@@ -23,10 +25,10 @@ public function store(Request $request)
         'message' => 'nullable|string|max:1000',
     ]);
 
-    
+   
     $resumePath = $request->file('resume')->store('resumes','public');
 
-    Application::create([
+    $application = Application::create([
         'user_id' => auth()->id(),
         'job_id' => $request->job_id,
         'resume_path' => $resumePath,
@@ -35,6 +37,11 @@ public function store(Request $request)
         'message' => $request->message,
         'status' => 'pending',
     ]);
+
+    $job = Job::find($request->job_id);
+    if ($job && $job->employer) {
+        $job->employer->notify(new NewApplicationNotification($application));
+    }
 
     return redirect()->back()->with('success', 'Application submitted successfully.');
 }

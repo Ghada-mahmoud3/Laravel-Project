@@ -49,6 +49,15 @@
                         <a href="/admin/users" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition">Users</a>
                     @endif
 
+
+                    @auth
+                        <a href="{{ route('notifications.index') }}" class="text-sm font-medium text-gray-600 hover:text-indigo-600 transition"> Notifications @if(Auth::user()->unreadNotifications->count() > 0)
+    <span class="ml-2 inline-flex items-center justify-center px-2 py-0.5 text-xs font-semibold leading-none text-white bg-red-600 rounded-full">
+        {{ Auth::user()->unreadNotifications->count() }}
+    </span>
+    @endif</a>
+                    @endauth
+
                    
                 </div>
             </div>

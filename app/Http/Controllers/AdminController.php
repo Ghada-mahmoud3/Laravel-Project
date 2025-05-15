@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Job;
+use App\Notifications\JobStatusNotification;
 
 class AdminController extends Controller
 {
@@ -70,6 +71,8 @@ class AdminController extends Controller
         $job->update(['is_approved' => true]);
         $job->save();
 
+        $job->employer->notify(new JobStatusNotification($job, 'approved'));
+
         return redirect()->back()->with('success', 'Job approved successfully.');
     }
 
@@ -78,6 +81,8 @@ class AdminController extends Controller
         $job = Job::findOrFail($id);
         $job->update(['is_approved' => false]);
         $job->save();
+
+        $job->employer->notify(new JobStatusNotification($job, 'rejected'));
 
         return redirect()->back()->with('success', 'Job rejected successfully.');
     }

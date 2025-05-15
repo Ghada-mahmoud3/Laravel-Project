@@ -8,6 +8,8 @@ use App\Models\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
+use App\Notifications\NewJobNotification;
+
 
 
 class JobController extends Controller
@@ -144,6 +146,11 @@ class JobController extends Controller
                 'application_deadline' => $request->application_deadline,
                 'logo_path' => $logoPath,
             ]);
+
+            $admins = \App\Models\User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewJobNotification($job));
+            }
 
             return redirect()->route('employer.applications.index')->with('success', 'Job created successfully.');
         } catch (\Exception $e) {

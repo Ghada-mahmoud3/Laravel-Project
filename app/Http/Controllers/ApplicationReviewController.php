@@ -7,6 +7,7 @@ use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Notifications\ApplicationStatusNotification;
 
 class ApplicationReviewController extends Controller
 {
@@ -67,6 +68,9 @@ class ApplicationReviewController extends Controller
         $application->status = 'accepted';
         $application->save();
 
+        $application->user->notify(new ApplicationStatusNotification($job, 'accepted'));
+
+
         return redirect()->back()->with('success', 'Application accepted successfully.');
     }
 
@@ -83,6 +87,8 @@ class ApplicationReviewController extends Controller
 
         $application->status = 'rejected';
         $application->save();
+
+        $application->user->notify(new ApplicationStatusNotification($job, 'rejected'));
 
         return redirect()->back()->with('success', 'Application rejected successfully.');
     }

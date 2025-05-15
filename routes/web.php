@@ -46,20 +46,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
     Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
 
-    // باقي الطرق...
-
-
-
-
-// Route::middleware('auth')->group(function () {
-// Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
-//     Route::get('/jobs/search', [JobController::class, 'search'])->name('jobs.search');
-//     Route::get('/jobs/show/{id}', [JobController::class, 'show'])->name('jobs.show');
-//     // Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
-//     Route::get('/jobs/{id}/edit', [JobController::class, 'edit'])->name('jobs.edit');
-//     Route::put('/jobs/{id}', [JobController::class, 'update'])->name('jobs.update');
-//     Route::delete('/jobs/{id}', [JobController::class, 'destroy'])->name('jobs.destroy');
-
+    
     Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
     Route::post('/applications', [ApplicationController::class, 'store'])->name('applications.store');
     // Route::delete('/applications/{id}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
@@ -70,12 +57,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/{id}', [ProfileController::class, 'showOther'])->name('profile.show.other');
 
+    Route::get('/notifications', function () {
+        $notifications = auth()->user()->notifications;
+        return view('notifications.index', compact('notifications'));
+    })->name('notifications.index');
+
+    Route::post('/notifications/mark-read', function () {
+        auth()->user()->unreadNotifications->markAsRead();
+        return back();
+    })->name('notifications.markRead');
+    
+
 });
-
-
-Route::get('/notifications', function () {
-    return view('notifications.index');
-})->middleware('auth');
 
 
 Route::get('/', [AuthenticatedSessionController::class, 'create'])
